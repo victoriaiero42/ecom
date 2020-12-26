@@ -6,6 +6,7 @@ import { createProduct } from "../../../fucns/product";
 import ProductCreateForm from "../../../components/forms/ProductCreateForm";
 import { getCategories, getCategorysSubs } from "../../../fucns/category";
 import FileUpload from "../../../components/forms/FileUpload";
+import { LoadingOutlined } from '@ant-design/icons';
 
 const initialState = {
   title: "",
@@ -18,7 +19,7 @@ const initialState = {
   quantity: "",
   images: [],
   colors: ["Black", "Brown", "Silver", "White", "Blue"],
-  brands: ["Apple", "Samsung", "Microsoft", "Lenovo", "ASUS"],
+  brands: ["Apple", "Samsung", "Microsoft", "Lenovo", "ASUS", "DELL"],
   color: "",
   brand: "",
 };
@@ -28,7 +29,7 @@ export default function ProductCreate() {
   const [subOptions, setSubOptions] = useState([]);
   const [showSub, setShowSub] = useState(false);
   const { user } = useSelector((state) => ({ ...state }));
-  const [loading, setloading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const loadCategories = useCallback(
     () =>
@@ -78,7 +79,7 @@ export default function ProductCreate() {
         </div>
 
         <div className="col-md-10">
-          <h4>Product create</h4>
+          { loading ? <LoadingOutlined className='text-danger h1' /> : <h4>Product create</h4> }
           <hr />
 
           { JSON.stringify(values.images) }
@@ -87,7 +88,7 @@ export default function ProductCreate() {
             <FileUpload
               values={ values }
               setValues={ setValues }
-              setloading={ setloading }
+              setLoading={ setLoading }
             />
           </div>
           <ProductCreateForm

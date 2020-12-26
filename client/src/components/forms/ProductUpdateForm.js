@@ -2,7 +2,7 @@ import React, { memo } from "react";
 import { Select } from "antd";
 const { Option } = Select;
 
-function ProductCreateForm({
+function ProductUpdateForm({
   handleSubmit,
   handleChange,
   values,
@@ -69,7 +69,7 @@ function ProductCreateForm({
             type="text"
             name="shipping"
             className="form-control"
-            value={ shipping }
+            value={ shipping === "Yes" ? "Yes" : "No" }
             onChange={ handleChange }>
             <option>Please, select</option>
             <option value="Yes">Yes</option>
@@ -122,41 +122,7 @@ function ProductCreateForm({
           </select>
         </div>
 
-        <div className="form-group">
-          <label>Category</label>
-          <select
-            name="category"
-            className="form-control"
-            onChange={ handleCatgegoryChange }>
-            <option>Please, select</option>
-            { categories.length > 0 &&
-              categories.map((c) => (
-                <option key={ c._id } value={ c._id }>
-                  {c.name }
-                </option>
-              )) }
-          </select>
-        </div>
 
-        { showSub && (
-          <div>
-            <label>Sub Category</label>
-            <Select
-              mode="multiple"
-              style={ { width: "100%" } }
-              placeholder="Please, select"
-              value={ values.subs }
-              onChange={ (value) => setValues({ ...values, subs: value }) }
-              name="subs">
-              { subOptions.length &&
-                subOptions.map((s) => (
-                  <Option key={ s._id } value={ s._id }>
-                    {s.name }
-                  </Option>
-                )) }
-            </Select>
-          </div>
-        ) }
         <br />
         <button className="btn btn-outline-info">save</button>
       </form>
@@ -164,4 +130,4 @@ function ProductCreateForm({
   );
 }
 
-export default memo(ProductCreateForm);
+export default memo(ProductUpdateForm);

@@ -19,6 +19,8 @@ import CategoryUpdate from './pages/admin/category/CategoryUpdate';
 import SubCreate from './pages/admin/sub/SubCreate';
 import SubUpdate from './pages/admin/sub/SubUpdate';
 import ProductCreate from './pages/admin/product/ProductCreate';
+import ProductUpdate from './pages/admin/product/ProductUpdate';
+import AllProducts from './pages/admin/product/AllProducts';
 
 import { auth } from './firebase1';
 import { useDispatch } from 'react-redux';
@@ -61,21 +63,23 @@ function App() {
       <Header />
       <ToastContainer />
       <Switch>
-        <Route path='/login' component={ Login } />
-        <Route path='/register/complete' component={ RegisterComplete } />
-        <Route path='/register' component={ Register } />
-        <Route path='/forgot/password' component={ ForgotPassword } />
-        <UserRoute path='/user/history' component={ History } />
-        <UserRoute path='/user/password' component={ Password } />
-        <UserRoute path='/user/wishlist' component={ Wishlist } />
-        <AdminRoute path='/admin/dashboard' component={ AdminDashbord } />
+        <Route exact path='/login' component={ Login } />
+        <Route exact path='/register/complete' component={ RegisterComplete } />
+        <Route exact path='/register' component={ Register } />
+        <Route exact path='/forgot/password' component={ ForgotPassword } />
+        <UserRoute exact path='/user/history' component={ History } />
+        <UserRoute exact path='/user/password' component={ Password } />
+        <UserRoute exact path='/user/wishlist' component={ Wishlist } />
+        <AdminRoute exact path='/admin/dashboard' component={ AdminDashbord } />
         <AdminRoute exact path='/admin/category' component={ CategoryCreate } />
         <AdminRoute exact path='/admin/category/:slug' component={ CategoryUpdate } />
         <AdminRoute exact path='/admin/sub/:slug' component={ SubUpdate } />
         <AdminRoute exact path='/admin/sub' component={ SubCreate } />
         <AdminRoute exact path='/admin/product' component={ ProductCreate } />
+        <AdminRoute exact path='/admin/product/:slug' component={ ProductUpdate } />
+        <AdminRoute exact path='/admin/products' component={ AllProducts } />
 
-        <Route path='/' component={ Home } />
+        <Route exact path='/' component={ Home } />
 
       </Switch>
     </>

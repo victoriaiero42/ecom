@@ -31,18 +31,18 @@ const productSchema = new mongoose.Schema({
     type: ObjectId,
     ref: "Category",
   },
-  // subs: [{
-  //   type: ObjectId,
-  //   ref: "Sub",
-  // }],
+  subs: [{
+    type: ObjectId,
+    ref: "Sub",
+  }],
   quantity: Number,
   sold: {
     type: Number,
     default: 0,
   },
-  // images: {
-  //   type: Array,
-  // },
+  images: {
+    type: Array,
+  },
   shipping: {
     type: String,
     enum: ['Yes', 'No'],
@@ -53,7 +53,7 @@ const productSchema = new mongoose.Schema({
   },
   brand: {
     type: String,
-    enum: ['Apple', 'Samsung', 'Microsoft', 'Lenovo', 'ASUS'],
+    enum: ['Apple', 'Samsung', 'Microsoft', 'Lenovo', 'ASUS', 'DELL'],
   },
   // rating: [
   //   {
