@@ -17,7 +17,7 @@ function ProductCreateForm({
     price,
     categories,
     // category,
-    // subs,
+    subs,
     quantity,
     // images,
     shipping,
@@ -145,7 +145,7 @@ function ProductCreateForm({
               mode="multiple"
               style={ { width: "100%" } }
               placeholder="Please, select"
-              value={ values.subs }
+              value={ subs }
               onChange={ (value) => setValues({ ...values, subs: value }) }
               name="subs">
               { subOptions.length &&

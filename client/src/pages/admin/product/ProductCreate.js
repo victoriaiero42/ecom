@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import { createProduct } from "../../../fucns/product";
 import ProductCreateForm from "../../../components/forms/ProductCreateForm";
-import { getCategories, getCategorysSubs } from "../../../fucns/category";
+import { getCategories, getCategorySubs } from "../../../fucns/category";
 import FileUpload from "../../../components/forms/FileUpload";
 import { LoadingOutlined } from '@ant-design/icons';
 
@@ -62,9 +62,9 @@ export default function ProductCreate() {
 
   const handleCatgegoryChange = (e) => {
     e.preventDefault();
-    console.log("clicked category", e.target.value);
+    // console.log("clicked category", e.target.value);
     setValues({ ...values, subs: [], category: e.target.value });
-    getCategorysSubs(e.target.value).then((res) => {
+    getCategorySubs(e.target.value).then((res) => {
       console.log(res, "sub options on category click");
       setSubOptions(res.data);
     });

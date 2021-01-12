@@ -46,3 +46,39 @@ exports.read = async (req, res) => {
     .exec();
   res.json(product);
 };
+
+exports.update = async (req, res) => {
+  try {
+    if (req.body.title) {
+      req.body.slug = slugify(req.body.title);
+    }
+    const updated = await Product.findOneAndUpdate(
+      { slug: req.params.slug },
+      req.body,
+      { new: true }
+    ).exec();
+    res.json(updated);
+  } catch (error) {
+    console.log("PRDUCT UPDATE ERROR ======>>>", error);
+    // return res.status(400).send("product update failed");
+    res.status(400).json({
+      error: error.message,
+    })
+  }
+};
+
+exports.list = async (req, res) => {
+  try {
+    const { sort, order, limit } = req.body;
+    const products = await Product.find({})
+      .populate('category')
+      .populate('subs')
+      .sort([[sort, order]])
+      .limit(limit)
+      .exec()
+
+    res.json(products);
+  } catch (err) {
+    console.log(err);
+  }
+}

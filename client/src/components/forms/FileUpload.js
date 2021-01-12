@@ -92,7 +92,7 @@ export default function FileUpload({ setValues, values, setLoading }) {
           )) }
       </div>
       <div className="row">
-        <label className="btn btn-primary btn-raised">
+        <label className="btn btn-primary btn-raised mt-3">
           Choose file:
           <input
             type="file"
