@@ -1,5 +1,6 @@
 const Product = require("../models/product");
 const slugify = require("slugify");
+const { default: UserNav } = require("../../client/src/components/nav/UserNav");
 
 exports.create = async (req, res) => {
   try {
@@ -108,4 +109,36 @@ exports.list = async (req, res) => {
 exports.productsCount = async (req, res) => {
   let total = await Product.find({}).estimatedDocumentCount().exec();
   res.json(total);
+};
+
+exports.productStar = async (req, res) => {
+  const product = await Product.findById(req.params.productId).exec();
+  const user = await User.findOne({ email: req.user.email }).exec();
+  const { star } = req.body;
+
+  let existingRaitingObject = product.raitings.find(
+    (e) => e.postedBy.toString() === user._id.toString()
+  );
+
+  // if user haven't left raiting yet, push it
+  if (existingRaitingObject === undefined) {
+    let raitingAdded = await Product.findByIdAndUpdate(
+      product._id,
+      {
+        $push: { raitings: { star: star, postedBy: user._id } },
+      },
+      { new: true }
+    ).exec();
+    console.log(raitingAdded);
+    res.json(raitingAdded);
+  } else {
+    //if user have already left raiting, update it
+    const raitingUpdated = await Product.updateOne(
+      { raitings: { $elemMatch: existingRaitingObject } },
+      { $set: { "raitings.$.star": star } },
+      { new: true }
+    ).exec();
+    console.log(raitingUpdated);
+    res.json(raitingUpdated);
+  }
 };

@@ -55,15 +55,15 @@ const productSchema = new mongoose.Schema({
     type: String,
     enum: ['Apple', 'Samsung', 'Microsoft', 'Lenovo', 'ASUS', 'DELL'],
   },
-  // rating: [
-  //   {
-  //     star: Number,
-  //     postedaBy: {
-  //       type: ObjectId,
-  //       ref: "User",
-  //     }
-  //   }
-  // ]
+  rating: [
+    {
+      star: Number,
+      postedBy: {
+        type: ObjectId,
+        ref: "User",
+      }
+    }
+  ]
 }, { timestamps: true });
 
 module.exports = mongoose.model('Product', productSchema);
