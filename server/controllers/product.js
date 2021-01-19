@@ -1,6 +1,5 @@
 const Product = require("../models/product");
 const slugify = require("slugify");
-const { default: UserNav } = require("../../client/src/components/nav/UserNav");
 
 exports.create = async (req, res) => {
   try {

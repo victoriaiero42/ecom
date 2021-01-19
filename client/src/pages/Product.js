@@ -17,11 +17,15 @@ export default function Product({ match }) {
       setProduct(res.data);
     });
   };
+
+  const onStarClick = (newRating, name) => {
+    console.table(newRating, name);
+  }
   return (
     <>
       <div className="container-fluid">
         <div className="row pt-4">
-          <SingleProduct product={ product } />
+          <SingleProduct product={ product } onStarClick={ onStarClick } />
         </div>
       </div>
       <div className="row">

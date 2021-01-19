@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { auth, googleAuthProvider } from '../../firebase1';
-// import { toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 import { Button } from "antd";
 import { MailOutlined, GoogleOutlined } from "@ant-design/icons";
@@ -18,19 +17,31 @@ function Login({ history }) {
   const dispatch = useDispatch();
 
   const roleBasedRedirect = (res) => {
-    if (res.data.role === 'admin') {
-      history.push('admin/dashboard');
+
+    let intended = history.location.state;
+
+    if (intended) {
+      history.push(intended.from)
     } else {
-      history.push('user/history');
+      if (res.data.role === 'admin') {
+        history.push('admin/dashboard');
+      } else {
+        history.push('user/history');
+      }
     }
+
   }
 
   let { user } = useSelector((state) => ({ ...state }));
 
   useEffect(() => {
-    if (user && user.token) {
-      history.push('/')
-    };
+    let intended = history.location.state;
+    if (intended) {
+      return
+    } else {
+      if (user && user.token) history.push('/')
+
+    }
 
   }, [history, user])
 
