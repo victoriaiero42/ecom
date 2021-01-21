@@ -1,4 +1,5 @@
 const Product = require("../models/product");
+const User = require("../models/user");
 const slugify = require("slugify");
 
 exports.create = async (req, res) => {
@@ -115,29 +116,47 @@ exports.productStar = async (req, res) => {
   const user = await User.findOne({ email: req.user.email }).exec();
   const { star } = req.body;
 
-  let existingRaitingObject = product.raitings.find(
+  let existingRatingObject = product.rating.find(
     (e) => e.postedBy.toString() === user._id.toString()
   );
+  // console.log('existingRatingObject', existingRatingObject);
+  console.log(product._id, star, user._id);
 
-  // if user haven't left raiting yet, push it
-  if (existingRaitingObject === undefined) {
-    let raitingAdded = await Product.findByIdAndUpdate(
+  if (existingRatingObject === undefined) {
+    let ratingAdded = await Product.findByIdAndUpdate(
       product._id,
       {
-        $push: { raitings: { star: star, postedBy: user._id } },
+        $push: { rating: { star: star, postedBy: user._id } },
       },
       { new: true }
     ).exec();
-    console.log(raitingAdded);
-    res.json(raitingAdded);
+    console.log('ratingAdded', ratingAdded);
+    res.json(ratingAdded);
   } else {
-    //if user have already left raiting, update it
-    const raitingUpdated = await Product.updateOne(
-      { raitings: { $elemMatch: existingRaitingObject } },
+
+    const ratingUpdated = await Product.updateOne(
+      { ratings: { $elemMatch: existingRatingObject } },
       { $set: { "raitings.$.star": star } },
       { new: true }
     ).exec();
-    console.log(raitingUpdated);
-    res.json(raitingUpdated);
+    console.log('ratingUpdated', ratingUpdated);
+    res.json(ratingUpdated);
   }
 };
+
+exports.relatedProducts = async (req, res) => {
+  const { productId } = req.params;
+
+  const product = await Product.findById(productId).exec();
+  const related = await Product.find({
+    _id: { $ne: product._id },
+    category: product.category,
+  })
+    .limit(3)
+    .populate("category")
+    .populate("subs")
+    .populate("postedBy")
+    .exec();
+
+  res.json(related)
+}

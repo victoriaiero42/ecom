@@ -6,14 +6,14 @@ import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import laptop from "../../images/laptop.jpg";
 import ProductListItems from "./ProductListItems";
-import StarRaitings from "react-star-ratings";
-import RatingModal from '../modals/RatingModal';
+import StarRatings from "react-star-ratings";
+import RatingModal from "../modals/RatingModal";
+import { showAverage } from "../../fucns/rating";
 
 const { TabPane } = Tabs;
 
-
 // this is children component of Product page:
-export default function SingleProduct({ product, onStarClick }) {
+export default function SingleProduct({ product, onStarClick, star }) {
   const { title, images, description, _id } = product;
 
   return (
@@ -45,7 +45,11 @@ export default function SingleProduct({ product, onStarClick }) {
       <div className="col-md-5">
         <h1 className="bg-info p-3">{ title }</h1>
 
-
+        { product && product.rating && product.rating.length > 0 ? (
+          showAverage(product)
+        ) : (
+            <div className="text-center pt-1 pb-3">No rating yet.</div>
+          ) }
 
         <Card
           actions={ [
@@ -58,17 +62,15 @@ export default function SingleProduct({ product, onStarClick }) {
               Add to whishlist
             </Link>,
             <RatingModal>
-
-              <StarRaitings
+              <StarRatings
                 name={ _id }
                 numberOfStars={ 5 }
-                raiting={ 2 }
+                rating={ star }
                 changeRating={ onStarClick }
                 isSelectable={ true }
                 starRatedColor="black"
               />
-
-            </RatingModal>
+            </RatingModal>,
           ] }>
           <ProductListItems product={ product } />
         </Card>

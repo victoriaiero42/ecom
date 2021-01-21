@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 export default function ProductListItems({ product }) {
   const { price, category, subs, shipping, color, brand, quantity, sold } = product;
-  console.log(product);
+  // console.log(product);
   // const { slug } = category;
   return (
     <ul className="list-group">
