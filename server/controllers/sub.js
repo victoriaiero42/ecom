@@ -1,6 +1,6 @@
 const Sub = require("../models/subCat");
 const slugify = require("slugify");
-const { response } = require("express");
+const Product = require("../models/product");
 
 exports.create = async (req, res) => {
   try {
@@ -40,7 +40,10 @@ exports.update = async (req, res) => {
 
 exports.read = async (req, res) => {
   let sub = await Sub.findOne({ slug: req.params.slug }).exec();
-  res.json(sub);
+  const products = await Product.find({ subs: sub })
+    .populate("category")
+    .exec();
+  res.json({ sub, products });
 };
 
 exports.remove = async (req, res) => {
@@ -50,6 +53,6 @@ exports.remove = async (req, res) => {
     }).exec();
     res.json(deleted);
   } catch (error) {
-    response.status(400).send("Sub delete failed");
+    res.status(400).send("Sub delete failed");
   }
 };

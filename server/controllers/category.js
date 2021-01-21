@@ -41,7 +41,7 @@ exports.update = async (req, res) => {
 
 exports.read = async (req, res) => {
   let category = await Category.findOne({ slug: req.params.slug }).exec();
-  const products = await Product.find({ category: category }).populate('category').populate('postedBy', '_id name').exec();
+  const products = await Product.find({ category: category }).populate('category').exec();
   res.json({ category, products });
 };
 
