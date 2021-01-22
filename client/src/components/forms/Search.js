@@ -18,7 +18,7 @@ export default function Search() {
   };
 
   const handleSubmit = (e) => {
-    e.prevenyDefault();
+    e.preventDefault();
     history.push(`/shop?${text}`)
   };
 
