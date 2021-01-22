@@ -12,6 +12,7 @@ import firebase from "firebase";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { LOGOUT } from "../../redux/actionTypes";
+import Search from '../forms/Search';
 
 const { SubMenu, Item, ItemGroup } = Menu;
 
@@ -81,6 +82,10 @@ function Header() {
           </ItemGroup>
         </SubMenu>
       ) }
+
+      <span className='float-right p-1'>
+        <Search />
+      </span>
     </Menu>
   );
 }

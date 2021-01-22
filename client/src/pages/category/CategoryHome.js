@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { getCategory } from "../../fucns/category";
-import { Link } from "react-router-dom";
 import ProductCard from "../../components/cards/ProductCard";
-import CategoryList from "../../components/category/CategoryList";
 
 export default function CategoryHome({ match }) {
   const [category, setCategory] = useState({});

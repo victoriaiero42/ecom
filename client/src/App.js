@@ -9,8 +9,8 @@ import Header from './components/nav/Header';
 import ForgotPassword from '../src/pages/auth/ForgotPassword';
 import RegisterComplete from './pages/auth/RegisterComplete';
 import { LOGGED_IN_USER } from './redux/actionTypes';
-import UserRoute from './components/Routs/UserRoute';
-import AdminRoute from './components/Routs/AdminRoute';
+import UserRoute from './components/routs/UserRoute';
+import AdminRoute from './components/routs/AdminRoute';
 import Password from './pages/user/Password';
 import Wishlist from './pages/user/Wishlist';
 import AdminDashbord from './pages/admin/AdminDashbord';
@@ -23,6 +23,7 @@ import ProductUpdate from './pages/admin/product/ProductUpdate';
 import AllProducts from './pages/admin/product/AllProducts';
 import Product from './pages/Product';
 import CategoryHome from './pages/category/CategoryHome';
+import SubHome from './pages/sub/SubHome';
 
 import { auth } from './firebase1';
 import { useDispatch } from 'react-redux';
@@ -85,6 +86,7 @@ function App() {
 
         <Route exact path='/product/:slug' component={ Product } />
         <Route exact path='/category/:slug' component={ CategoryHome } />
+        <Route exact path='/sub/:slug' component={ SubHome } />
 
       </Switch>
     </>
