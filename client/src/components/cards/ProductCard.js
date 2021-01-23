@@ -33,7 +33,7 @@ export default function ProductCard({ product }) {
       ] }>
 
       <Meta
-        title={ product.title }
+        title={ `${product.title} - $${product.price}` }
         description={ `${product.description && product.description.substring(0, 10)}...` }
         images={ product.images }
       />
