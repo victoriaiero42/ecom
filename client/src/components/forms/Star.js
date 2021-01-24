@@ -7,8 +7,8 @@ export default function Star({ starClick, numberOfStars }) {
       <StarRating
         numberOfStars={ numberOfStars }
         changeRating={ () => starClick(numberOfStars) }
-        starDimention="20px"
-        starSpacing="2px"
+        starDimension="20px"
+        starSpacing="1px"
         starHoverColor='red'
         starEmptyColor='red'
       />

@@ -1,12 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { getProductsByCount, fetchProductsByFilter } from "../fucns/product";
 import { getCategories } from "../fucns/category";
+import { getSubs } from "../fucns/sub";
 import { useSelector, useDispatch } from "react-redux";
 import ProductCard from "../components/cards/ProductCard";
 import { Menu, Slider, Checkbox } from "antd";
-import { DollarOutlined, DownCircleOutlined } from "@ant-design/icons";
+import {
+  DollarOutlined,
+  DownCircleOutlined,
+  StarOutlined,
+} from "@ant-design/icons";
 import { SEARCH_QUERY } from "../redux/actionTypes";
-import Star from '../components/forms/Star';
+import Star from "../components/forms/Star";
 
 export default function Shop() {
   const [products, setProducts] = useState([]);
@@ -15,7 +20,9 @@ export default function Shop() {
   const [ok, setOk] = useState(false);
   const [categories, setCategories] = useState([]);
   const [categoryIds, setCategoryIds] = useState([]);
-  const [star, setStar] = useState('');
+  const [star, setStar] = useState("");
+  const [subs, setSubs] = useState([]);
+  const [sub, setSub] = useState("");
 
   const dispatch = useDispatch();
 
@@ -26,6 +33,10 @@ export default function Shop() {
     loadAllProducts();
     getCategories().then((res) => {
       setCategories(res.data);
+    });
+
+    getSubs().then((res) => {
+      setSubs(res.data);
     });
   }, []);
 
@@ -61,8 +72,12 @@ export default function Shop() {
       type: SEARCH_QUERY,
       payload: { text: "" },
     });
+
+    //reset
     setCategoryIds([]);
     setPrice(value);
+    setStar("");
+    setSub("");
     setTimeout(() => {
       setOk(!ok);
     }, 300);
@@ -93,6 +108,7 @@ export default function Shop() {
     });
 
     setPrice([0, 0]);
+    setStar("");
 
     let inTheState = [...categoryIds];
     let justChecked = e.target.value;
@@ -109,8 +125,53 @@ export default function Shop() {
     fetchProducts({ category: inTheState });
   };
 
-
   // 5.show products by star rating
+
+  const handleStarClick = (num) => {
+    dispatch({
+      type: SEARCH_QUERY,
+      payload: { text: "" },
+    });
+
+    setPrice([0, 0]);
+    setCategoryIds([]);
+    setStar(num);
+    fetchProducts({ stars: num });
+  };
+
+  const showStars = () => (
+    <div className="pr-4 pl-4 pb-2">
+      <Star starClick={ handleStarClick } numberOfStars={ 5 } />
+      <Star starClick={ handleStarClick } numberOfStars={ 4 } />
+      <Star starClick={ handleStarClick } numberOfStars={ 3 } />
+      <Star starClick={ handleStarClick } numberOfStars={ 2 } />
+      <Star starClick={ handleStarClick } numberOfStars={ 1 } />
+    </div>
+  );
+
+  const showSubs = () =>
+    subs.map((s) => (
+
+      <div div key={ s._id } onClick={ () => handleSub(s) } className="p-1 m-1 badge badge-secondary"
+        style={ { cursor: 'pointer' } }
+      >
+        { s.name }
+      </div >
+    ));
+
+  const handleSub = (s) => {
+    console.log("sub", s);
+    setSub(s);
+    dispatch({
+      type: SEARCH_QUERY,
+      payload: { text: "" },
+    });
+
+    setPrice([0, 0]);
+    setCategoryIds([]);
+    setStar('');
+    fetchProducts({ sub });
+  };
 
   return (
     <div className="container-fluid">
@@ -118,7 +179,7 @@ export default function Shop() {
         <div className="col-md-3">
           <h4>Search/Filter</h4>
 
-          <Menu defaultOpenKeys={ ["1", "2"] } mode="inline">
+          <Menu defaultOpenKeys={ ["1", "2", "3"] } mode="inline">
             <Menu.SubMenu
               key="1"
               title={
@@ -148,6 +209,28 @@ export default function Shop() {
                 </span>
               }>
               <div>{ showCategories() }</div>
+            </Menu.SubMenu>
+
+            <Menu.SubMenu
+              key="3"
+              title={
+                <span className="h6">
+                  <StarOutlined />
+                  Rating
+                </span>
+              }>
+              <div>{ showStars() }</div>
+            </Menu.SubMenu>
+
+            <Menu.SubMenu
+              key="4"
+              title={
+                <span className="h6">
+                  <DownCircleOutlined />
+                  Sub Categories
+                </span>
+              }>
+              <div style={ { marginTop: "-10px" } } className="pl-4 pr-4">{ showSubs() }</div>
             </Menu.SubMenu>
           </Menu>
         </div>
