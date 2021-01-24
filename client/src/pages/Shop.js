@@ -4,7 +4,7 @@ import { getCategories } from "../fucns/category";
 import { getSubs } from "../fucns/sub";
 import { useSelector, useDispatch } from "react-redux";
 import ProductCard from "../components/cards/ProductCard";
-import { Menu, Slider, Checkbox } from "antd";
+import { Menu, Slider, Checkbox, Radio } from "antd";
 import {
   DollarOutlined,
   DownCircleOutlined,
@@ -23,6 +23,15 @@ export default function Shop() {
   const [star, setStar] = useState("");
   const [subs, setSubs] = useState([]);
   const [sub, setSub] = useState("");
+  const [brand, setBrand] = useState("");
+  const [brands, setBrands] = useState([
+    "Apple",
+    "Samsung",
+    "Microsoft",
+    "Lenovo",
+    "ASUS",
+    "DELL",
+  ]);
 
   const dispatch = useDispatch();
 
@@ -151,12 +160,14 @@ export default function Shop() {
 
   const showSubs = () =>
     subs.map((s) => (
-
-      <div div key={ s._id } onClick={ () => handleSub(s) } className="p-1 m-1 badge badge-secondary"
-        style={ { cursor: 'pointer' } }
-      >
-        { s.name }
-      </div >
+      <div
+        div
+        key={ s._id }
+        onClick={ () => handleSub(s) }
+        className="p-1 m-1 badge badge-secondary"
+        style={ { cursor: "pointer" } }>
+        {s.name }
+      </div>
     ));
 
   const handleSub = (s) => {
@@ -169,9 +180,34 @@ export default function Shop() {
 
     setPrice([0, 0]);
     setCategoryIds([]);
-    setStar('');
+    setStar("");
     fetchProducts({ sub });
   };
+  const handleBrand = (e) => {
+    console.log(e.target.value);
+    setSub("");
+    dispatch({
+      type: SEARCH_QUERY,
+      payload: { text: "" },
+    });
+
+    setPrice([0, 0]);
+    setCategoryIds([]);
+    setStar("");
+    setBrand(e.target.value);
+    fetchProducts({ brand: e.target.value });
+  };
+  const showBrands = () =>
+    brands.map((b) => (
+      <Radio
+        value={ b }
+        name={ b }
+        checked={ b === brand }
+        onChange={ handleBrand }
+        className="pb-1 pl-1 pr-4">
+        {b }
+      </Radio>
+    ));
 
   return (
     <div className="container-fluid">
@@ -230,7 +266,22 @@ export default function Shop() {
                   Sub Categories
                 </span>
               }>
-              <div style={ { marginTop: "-10px" } } className="pl-4 pr-4">{ showSubs() }</div>
+              <div style={ { marginTop: "-10px" } } className="pl-4 pr-4">
+                { showSubs() }
+              </div>
+            </Menu.SubMenu>
+
+            <Menu.SubMenu
+              key="5"
+              title={
+                <span className="h6">
+                  <DownCircleOutlined />
+                  Brands
+                </span>
+              }>
+              <div style={ { marginTop: "-10px" } } className="pl-4 pr-4">
+                { showBrands() }
+              </div>
             </Menu.SubMenu>
           </Menu>
         </div>
