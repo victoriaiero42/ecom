@@ -10,7 +10,6 @@ exports.create = async (req, res) => {
     res.json(newProduct);
   } catch (error) {
     console.log(error);
-    // res.staturs(400).send("Create category failed");
     res.status(400).json({
       err: err.message,
     });
@@ -61,7 +60,6 @@ exports.update = async (req, res) => {
     res.json(updated);
   } catch (error) {
     console.log("PRDUCT UPDATE ERROR ======>>>", error);
-    // return res.status(400).send("product update failed");
     res.status(400).json({
       error: error.message,
     });
@@ -119,7 +117,6 @@ exports.productStar = async (req, res) => {
   let existingRatingObject = product.rating.find(
     (e) => e.postedBy.toString() === user._id.toString()
   );
-  // console.log('existingRatingObject', existingRatingObject);
   console.log(product._id, star, user._id);
 
   if (existingRatingObject === undefined) {
@@ -166,7 +163,6 @@ const handleQuery = async (req, res, query) => {
     .populate("category", "_id name")
     .populate("category", "_id name")
     .exec();
-  // console.log(products);
   res.json(products);
 };
 
@@ -219,7 +215,6 @@ const handleStar = async (req, res, stars) => {
   ])
     .limit(12)
     .exec((err, aggregates) => {
-      // console.log('aggregates', aggregates);
       if (err) console.log(err);
       Product.find({ _id: aggregates })
         .populate("category", "_id name")
@@ -240,7 +235,6 @@ const handleSub = async (req, res, sub) => {
     .populate("subs", "_id name")
     .populate("postedBy", "_id name")
     .exec();
-  // console.log(products);
   res.json(products);
 };
 
@@ -250,7 +244,6 @@ const handleShipping = async (req, res, shipping) => {
     .populate("subs", "_id name")
     .populate("postedBy", "_id name")
     .exec();
-  // console.log(products);
   res.json(products);
 }
 
@@ -260,7 +253,6 @@ const handleColor = async (req, res, color) => {
     .populate("subs", "_id name")
     .populate("postedBy", "_id name")
     .exec();
-  // console.log(products);
   res.json(products);
 }
 
@@ -270,7 +262,6 @@ const handleBrand = async (req, res, brand) => {
     .populate("subs", "_id name")
     .populate("postedBy", "_id name")
     .exec();
-  // console.log(products);
   res.json(products);
 }
 
@@ -291,7 +282,7 @@ exports.searchFilters = async (req, res) => {
     await handleQuery(req, res, query);
   }
 
-  //[]
+
   if (price !== undefined) {
     console.log("price", price);
     await handlePrice(req, res, price);

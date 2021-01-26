@@ -4,6 +4,7 @@ import { EyeOutlined, ShoppingCartOutlined } from "@ant-design/icons";
 import laptop from "../../images/laptop.jpg";
 import { Link } from "react-router-dom";
 import { showAverage } from "../../fucns/rating";
+import _ from 'lodash';
 
 const { Meta } = Card;
 
@@ -12,6 +13,22 @@ export default function ProductCard({ product }) {
 
   const handleAddToCart = () => {
     let cart = [];
+    if (typeof window !== 'undefined') {
+      if (localStorage.getItem('cart')) {
+        cart = JSON.parse(localStorage.getItem('cart'))
+      }
+      //new product to cart
+      cart.push({
+        ...product,
+        count: 1,
+      })
+
+      //remove duplicates
+      let unique = _.uniqWith(cart, _.isEqual)
+      //save to local storage
+
+      localStorage.setItem('cart', JSON.stringify(unique))
+    }
 
   }
   return (
