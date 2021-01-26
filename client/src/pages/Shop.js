@@ -23,7 +23,9 @@ export default function Shop() {
   const [star, setStar] = useState("");
   const [subs, setSubs] = useState([]);
   const [sub, setSub] = useState("");
+  const [color, setColor] = useState("");
   const [brand, setBrand] = useState("");
+  const [shipping, setShipping] = useState("");
   const [brands, setBrands] = useState([
     "Apple",
     "Samsung",
@@ -31,6 +33,13 @@ export default function Shop() {
     "Lenovo",
     "ASUS",
     "DELL",
+  ]);
+  const [colors, setColors] = useState([
+    "Black",
+    "Brown",
+    "Silver",
+    "White",
+    "Blue",
   ]);
 
   const dispatch = useDispatch();
@@ -86,7 +95,10 @@ export default function Shop() {
     setCategoryIds([]);
     setPrice(value);
     setStar("");
+    setShipping("");
+    setColor("");
     setSub("");
+    setBrand("");
     setTimeout(() => {
       setOk(!ok);
     }, 300);
@@ -117,7 +129,11 @@ export default function Shop() {
     });
 
     setPrice([0, 0]);
+    setShipping("");
     setStar("");
+    setSub("");
+    setColor("");
+    setBrand("");
 
     let inTheState = [...categoryIds];
     let justChecked = e.target.value;
@@ -145,6 +161,10 @@ export default function Shop() {
     setPrice([0, 0]);
     setCategoryIds([]);
     setStar(num);
+    setShipping("");
+    setColor("");
+    setSub("");
+    setBrand("");
     fetchProducts({ stars: num });
   };
 
@@ -180,11 +200,14 @@ export default function Shop() {
 
     setPrice([0, 0]);
     setCategoryIds([]);
+    setColor("");
     setStar("");
+    setShipping("");
+    setBrand("");
     fetchProducts({ sub });
   };
   const handleBrand = (e) => {
-    console.log(e.target.value);
+    // console.log(e.target.value);
     setSub("");
     dispatch({
       type: SEARCH_QUERY,
@@ -194,20 +217,88 @@ export default function Shop() {
     setPrice([0, 0]);
     setCategoryIds([]);
     setStar("");
+    setShipping("");
+    setColor("");
     setBrand(e.target.value);
     fetchProducts({ brand: e.target.value });
   };
   const showBrands = () =>
     brands.map((b) => (
       <Radio
+        key={ b }
         value={ b }
         name={ b }
         checked={ b === brand }
         onChange={ handleBrand }
-        className="pb-1 pl-1 pr-4">
+        className="pb-1 pl-4 pr-4">
         {b }
       </Radio>
     ));
+
+  // 8.
+
+  const showColors = () =>
+    colors.map((c) => (
+      <Radio
+        key={ c }
+        value={ c }
+        name={ c }
+        checked={ c === color }
+        onChange={ handleColor }
+        className="pb-1 pl-4 pr-4">
+        {c }
+      </Radio>
+    ));
+
+  const handleColor = (e) => {
+    setSub("");
+    dispatch({
+      type: SEARCH_QUERY,
+      payload: { text: "" },
+    });
+
+    setPrice([0, 0]);
+    setCategoryIds([]);
+    setStar("");
+    setBrand("");
+    setShipping("");
+    setColor(e.target.value);
+    fetchProducts({ color: e.target.value });
+  };
+
+  const showShipping = (e) => (
+    <>
+      <Checkbox
+        className="pb-2 pl-4 pr-4"
+        onChange={ handleShippingChnage }
+        value="Yes"
+        checked={ shipping === "Yes" }
+      >Yes</Checkbox>
+
+      <Checkbox
+        className="pb-2 pl-4 pr-4"
+        onChange={ handleShippingChnage }
+        value="No"
+        checked={ shipping === "No" }
+      >No</Checkbox>
+    </>
+  );
+
+  const handleShippingChnage = (e) => {
+    setSub("");
+    dispatch({
+      type: SEARCH_QUERY,
+      payload: { text: "" },
+    });
+
+    setPrice([0, 0]);
+    setCategoryIds([]);
+    setStar("");
+    setBrand("");
+    setColor("");
+    setShipping(e.target.value);
+    fetchProducts({ shipping: e.target.value });
+  }
 
   return (
     <div className="container-fluid">
@@ -215,7 +306,9 @@ export default function Shop() {
         <div className="col-md-3">
           <h4>Search/Filter</h4>
 
-          <Menu defaultOpenKeys={ ["1", "2", "3"] } mode="inline">
+          <Menu
+            defaultOpenKeys={ ["1", "2", "3", "4", "5", "6", "7"] }
+            mode="inline">
             <Menu.SubMenu
               key="1"
               title={
@@ -279,8 +372,34 @@ export default function Shop() {
                   Brands
                 </span>
               }>
-              <div style={ { marginTop: "-10px" } } className="pl-4 pr-4">
+              <div style={ { marginTop: "-10px" } } className="pl-4 pr-5">
                 { showBrands() }
+              </div>
+            </Menu.SubMenu>
+
+            <Menu.SubMenu
+              key="6"
+              title={
+                <span className="h6">
+                  <DownCircleOutlined />
+                  Colors
+                </span>
+              }>
+              <div style={ { marginTop: "-10px" } } className="pl-4 pr-5">
+                { showColors() }
+              </div>
+            </Menu.SubMenu>
+
+            <Menu.SubMenu
+              key="7"
+              title={
+                <span className="h6">
+                  <DownCircleOutlined />
+                  Shipping
+                </span>
+              }>
+              <div style={ { marginTop: "-10px" } } className="pl-4 pr-5">
+                { showShipping() }
               </div>
             </Menu.SubMenu>
           </Menu>
