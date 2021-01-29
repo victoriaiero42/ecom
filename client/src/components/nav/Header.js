@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Menu } from "antd";
+import { Badge, Menu } from "antd";
 import {
   AppstoreOutlined,
   SettingOutlined,
@@ -7,14 +7,14 @@ import {
   UserAddOutlined,
   LogoutOutlined,
   ShoppingOutlined,
-  ShoppingCartOutlined
+  ShoppingCartOutlined,
 } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import firebase from "firebase";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { LOGOUT } from "../../redux/actionTypes";
-import Search from '../forms/Search';
+import Search from "../forms/Search";
 
 const { SubMenu, Item, ItemGroup } = Menu;
 
@@ -51,7 +51,11 @@ function Header() {
       </Item>
 
       <Item key="cart" icon={ <ShoppingCartOutlined /> }>
-        <Link to="/cart">Cart { cart.length } </Link>
+        <Link to="/cart">
+          <Badge count={ cart.length } offset={ [9, 0] }>
+            Cart
+          </Badge>
+        </Link>
       </Item>
 
       {!user && (
@@ -75,15 +79,13 @@ function Header() {
           <ItemGroup>
             { user && user.role === "subscriber" && (
               <Item Item key="setting:1">
-                <Link to='/user/history'>Dashboard</Link>
-
+                <Link to="/user/history">Dashboard</Link>
               </Item>
             ) }
 
             { user && user.role === "admin" && (
               <Item Item key="setting:1">
-                <Link to='/admin/dashboard'>Dashboard</Link>
-
+                <Link to="/admin/dashboard">Dashboard</Link>
               </Item>
             ) }
             <Item icon={ <LogoutOutlined /> } onClick={ logout }>
@@ -93,7 +95,7 @@ function Header() {
         </SubMenu>
       ) }
 
-      <span className='float-right p-1'>
+      <span className="float-right p-1">
         <Search />
       </span>
     </Menu>
