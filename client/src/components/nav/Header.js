@@ -7,6 +7,7 @@ import {
   UserAddOutlined,
   LogoutOutlined,
   ShoppingOutlined,
+  ShoppingCartOutlined
 } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import firebase from "firebase";
@@ -21,7 +22,7 @@ function Header() {
   const [current, setCurrent] = useState("");
   const dispatch = useDispatch();
 
-  let { user } = useSelector((state) => ({ ...state }));
+  let { user, cart } = useSelector((state) => ({ ...state }));
   const history = useHistory();
 
   const handleClick = (e) => {
@@ -47,6 +48,10 @@ function Header() {
 
       <Item key="shop" icon={ <ShoppingOutlined /> }>
         <Link to="/shop">Shop </Link>
+      </Item>
+
+      <Item key="cart" icon={ <ShoppingCartOutlined /> }>
+        <Link to="/cart">Cart { cart.length } </Link>
       </Item>
 
       {!user && (
