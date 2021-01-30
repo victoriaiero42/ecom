@@ -8,19 +8,20 @@ export default function Cart() {
 
   const getTotal = () => {
     return cart.reduce((c, n) => {
-      return c + n.count * n.price
+      return c + n.count * n.price;
     }, 0);
-  }
+  };
+
+  const saveOrderToDb = () => { };
 
   return (
     <div className="container-fluid pt-2">
-
       <div className="row">
         <div className="col-md-8">
           <h4>Cart: { cart.length } products.</h4>
           { !cart.length ? (
             <p>
-              No products in cart.<Link to="/shop">Continue shopping.</Link>{ " " }
+              No products in cart.<Link to="/shop">  Continue shopping.</Link>{ " " }
             </p>
           ) : (
               "show cart items"
@@ -32,23 +33,32 @@ export default function Cart() {
           <p>Products:</p>
           { cart.map((c, i) => (
             <div key={ c._id }>
-              <p>{ c.title } x { c.count } = ${ c.price * c.count }</p>
+              <p>
+                { c.title } x { c.count } = ${ c.price * c.count }
+              </p>
             </div>
           )) }
           <hr />
-
-Total: <b>${ getTotal() }</b>
-
+          Total: <b>${ getTotal() }</b>
           <hr />
-
           { user ? (
-            <button className="btn btn-sm btn-primary mt-2">Proceed to checkout</button>
+            <button
+              onClick={ saveOrderToDb }
+              className="btn btn-sm btn-primary mt-2"
+              disabled={ !cart.length }
+            >
+              Proceed to checkout
+            </button>
           ) : (
-              <button className="btn btn-sm btn-primary mt-2">Login to checkout</button>
+              <button className="btn btn-sm btn-primary mt-2">
+                <Link to={ {
+                  pathname: "/login",
+                  state: { from: "cart", }
+                } }>Login to checkout</Link>
+              </button>
             ) }
         </div>
       </div>
-
     </div>
   );
 }
