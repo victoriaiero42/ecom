@@ -117,7 +117,7 @@ exports.productStar = async (req, res) => {
   let existingRatingObject = product.rating.find(
     (e) => e.postedBy.toString() === user._id.toString()
   );
-  console.log(product._id, star, user._id);
+  // console.log(product._id, star, user._id);
 
   if (existingRatingObject === undefined) {
     let ratingAdded = await Product.findByIdAndUpdate(
@@ -127,7 +127,7 @@ exports.productStar = async (req, res) => {
       },
       { new: true }
     ).exec();
-    console.log("ratingAdded", ratingAdded);
+    // console.log("ratingAdded", ratingAdded);
     res.json(ratingAdded);
   } else {
     const ratingUpdated = await Product.updateOne(
@@ -135,7 +135,7 @@ exports.productStar = async (req, res) => {
       { $set: { "raitings.$.star": star } },
       { new: true }
     ).exec();
-    console.log("ratingUpdated", ratingUpdated);
+    // console.log("ratingUpdated", ratingUpdated);
     res.json(ratingUpdated);
   }
 };
@@ -178,7 +178,7 @@ const handlePrice = async (req, res, price) => {
       .populate("category", "_id name")
       .populate("category", "_id name")
       .exec();
-    console.log(products);
+    // console.log(products);
     res.json(products);
   } catch (error) {
     console.log(error);
@@ -194,7 +194,7 @@ const handleCategory = async (req, res, category) => {
       .populate("subs", "_id name")
       .populate("postedBy", "_id name")
       .exec();
-    console.log(products);
+    // console.log(products);
     res.json(products);
   } catch (error) {
     console.log(error);
@@ -278,43 +278,43 @@ exports.searchFilters = async (req, res) => {
   } = req.body;
 
   if (query) {
-    console.log("query", query);
+    // console.log("query", query);
     await handleQuery(req, res, query);
   }
 
 
   if (price !== undefined) {
-    console.log("price", price);
+    // console.log("price", price);
     await handlePrice(req, res, price);
   }
 
   if (category) {
-    console.log("category", category);
+    // console.log("category", category);
     await handleCategory(req, res, category);
   }
 
   if (stars) {
-    console.log(stars, "stars");
+    // console.log(stars, "stars");
     await handleStar(req, res, stars);
   }
 
   if (sub) {
-    console.log(sub, "sub");
+    // console.log(sub, "sub");
     await handleSub(req, res, sub);
   }
 
   if (shipping) {
-    console.log(shipping, "shipping");
+    // console.log(shipping, "shipping");
     await handleShipping(req, res, shipping);
   }
 
   if (color) {
-    console.log(color, "color");
+    // console.log(color, "color");
     await handleColor(req, res, color);
   }
 
   if (brand) {
-    console.log(brand, "brand");
+    // console.log(brand, "brand");
     await handleBrand(req, res, brand);
   }
 };
