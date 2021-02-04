@@ -7,6 +7,7 @@ import { showAverage } from "../../fucns/rating";
 import _ from 'lodash';
 import { useDispatch, useSelector } from 'react-redux';
 import { ADD_TO_CART } from '../../redux/actionTypes';
+import { SET_VISIBLE } from '../../redux/actionTypes';
 
 const { Meta } = Card;
 
@@ -38,7 +39,12 @@ export default function ProductCard({ product }) {
       dispatch({
         type: ADD_TO_CART,
         payload: unique,
-      })
+      });
+
+      dispatch({
+        type: SET_VISIBLE,
+        payload: true,
+      });
     }
 
   }

@@ -3,6 +3,8 @@ import ModalImage from "react-modal-image";
 import laptop from "../../images/laptop.jpg";
 import { useDispatch, useSelector } from 'react-redux';
 import { ADD_TO_CART } from '../../redux/actionTypes';
+import { toast } from "react-toastify";
+import { CheckSquareOutlined, CloseSquareOutlined, CloseOutlined } from "@ant-design/icons";
 
 export default function ProductCartInCheckout({ p }) {
 
@@ -43,6 +45,59 @@ export default function ProductCartInCheckout({ p }) {
     }
   };
 
+  const handleQuantityChange = (e) => {
+    // console.log('available products', p.quantity);
+    // console.log('handleQuantityChange', e.target.value);
+    let count = e.target.value < 1 ? 1 : e.target.value;
+
+    if (count > p.quantity) {
+      toast.error(`Maximum available quantity: ${p.quantity}`);
+      return;
+    }
+
+    let cart = [];
+
+    if (typeof window !== "undefined") {
+      if (localStorage.getItem("cart")) {
+        cart = JSON.parse(localStorage.getItem("cart"));
+      }
+      cart.map((product, i) => {
+        if (product._id === p._id) {
+          cart[i].count = count;
+        }
+      });
+
+      localStorage.setItem("cart", JSON.stringify(cart));
+      dispatch({
+        type: ADD_TO_CART,
+        payload: cart,
+      });
+    }
+  };
+
+
+
+  const handleRemove = (e) => {
+
+    let cart = [];
+
+    if (typeof window !== "undefined") {
+      if (localStorage.getItem("cart")) {
+        cart = JSON.parse(localStorage.getItem("cart"));
+      }
+      cart.map((product, i) => {
+        if (product._id === p._id) {
+          cart.splice(i, 1);
+        }
+      });
+
+      localStorage.setItem("cart", JSON.stringify(cart));
+      dispatch({
+        type: ADD_TO_CART,
+        payload: cart,
+      });
+    }
+  }
   return (
     <tbody>
       <tr>
@@ -74,9 +129,25 @@ export default function ProductCartInCheckout({ p }) {
               )) }
           </select>
         </td>
-        <td>{ p.count }</td>
-        <td>Shipping Icon</td>
-        <td>Delete Icon</td>
+        <td>
+          <input
+            onChange={ handleQuantityChange }
+            type="number"
+            className="form-control"
+            value={ p.count }
+          />
+        </td>
+        <td>
+          { p.shipping === "Yes" ? (
+            <CheckSquareOutlined className="text-success" />
+          ) : (
+              <CloseSquareOutlined className="text-danger" />
+            ) }
+        </td>
+        <td ><CloseOutlined
+          onClick={ () => handleRemove(p._id) }
+          className="text-danger pointer"
+        /> </td>
       </tr>
     </tbody>
   );

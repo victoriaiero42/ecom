@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { Switch, Route } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import SideDrawer from './components/drawer/SideDrawer';
 import Login from './pages/auth/Login';
 import Register from './pages/auth/Register';
 import Home from './pages/Home';
@@ -9,8 +10,8 @@ import Header from './components/nav/Header';
 import ForgotPassword from '../src/pages/auth/ForgotPassword';
 import RegisterComplete from './pages/auth/RegisterComplete';
 import { LOGGED_IN_USER } from './redux/actionTypes';
-import UserRoute from './components/routs/UserRoute';
-import AdminRoute from './components/routs/AdminRoute';
+import UserRoute from './components/Routs/UserRoute';
+import AdminRoute from './components/Routs/AdminRoute';
 import Password from './pages/user/Password';
 import Wishlist from './pages/user/Wishlist';
 import AdminDashbord from './pages/admin/AdminDashbord';
@@ -65,6 +66,7 @@ function App() {
   return (
     <>
       <Header />
+      <SideDrawer />
       <ToastContainer />
       <Switch>
         <Route exact path='/' component={ Home } />
