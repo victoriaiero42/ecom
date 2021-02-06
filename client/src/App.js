@@ -93,7 +93,7 @@ function App() {
         <Route exact path='/sub/:slug' component={ SubHome } />
         <Route exact path='/shop' component={ Shop } />
         <Route exact path='/cart' component={ Cart } />
-        <UserRoute exact path='checkout' component={ Checkout } />
+        <UserRoute exact path='/checkout' component={ Checkout } />
 
       </Switch>
     </>

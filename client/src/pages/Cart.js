@@ -15,7 +15,7 @@ export default function Cart({ history }) {
 
   const saveOrderToDb = () => {
     alert('save order to DB');
-    history.push('/checkout')
+    history.push('/checkout');
   };
 
   const showCartItems = () => {
