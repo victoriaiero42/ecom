@@ -15,7 +15,6 @@ export default function SideDrawer() {
     objectFit: "cover",
   };
 
-  console.log('drawer', cart);
   return (
     <Drawer
       className="text-center"
