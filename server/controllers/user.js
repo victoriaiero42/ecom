@@ -51,7 +51,7 @@ exports.userCart = async (req, res) => {
 
   }).save();
 
-  console.log('new cart', newCart);
+  console.log('new cart>>>>>>>>', newCart);
 
   res.json({ ok: true });
 
