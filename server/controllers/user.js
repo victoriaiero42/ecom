@@ -8,9 +8,9 @@ exports.userCart = async (req, res) => {
   let products = [];
 
   const user = await User.findOne({ email: req.user.email }).exec();
-
+  // console.log(user);
   let usersCart = await Cart.findOne({ orderedBy: user._id }).exec();
-
+  // console.log(usersCart);
   if (usersCart) {
     usersCart.remove();
     console.log("removed old cart");
@@ -52,7 +52,6 @@ exports.userCart = async (req, res) => {
   }).save();
 
   console.log('new cart>>>>>>>>', newCart);
-
   res.json({ ok: true });
 
 };

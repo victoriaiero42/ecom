@@ -7,7 +7,7 @@ import { userCart } from '../fucns/user';
 export default function Cart({ history }) {
 
   const { user, cart } = useSelector((state) => ({ ...state }));
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
   const getTotal = () => {
     return cart.reduce((c, n) => {
@@ -17,13 +17,12 @@ export default function Cart({ history }) {
 
   const saveOrderToDb = () => {
     // console.log('cart', JSON.stringify(cart, null, 4));
-    userCart(cart, user.token)
-      .then(res => {
-        console.log('cart post res', res);
-        if (res.data.ok) {
-          history.push('/checkout');
-        }
-      }).catch(err => console.log('cart save error', err));
+    userCart(cart, user.token).then(res => {
+      console.log('cart post res', res);
+      if (res.data.ok) {
+        history.push('/checkout');
+      }
+    }).catch(err => console.log('cart save error', err));
 
   };
 
