@@ -70,6 +70,10 @@ export default function Shop() {
     const delayed = setTimeout(() => {
       console.log("load products on user search", text);
       fetchProducts({ query: text });
+
+      if (!text) {
+        loadAllProducts();
+      }
     }, 300);
     return () => clearTimeout(delayed);
   }, [text]);

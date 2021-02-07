@@ -1,15 +1,17 @@
 import { useEffect } from "react";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getUserCart } from '../fucns/user';
+import { getUserCart, saveUserAddress, emptyUserCart } from '../fucns/user';
 import { ADD_TO_CART } from '../redux/actionTypes';
-import { emptyUserCart } from '../fucns/user';
 import { toast } from "react-toastify";
+import ReactQuill from 'react-quill'
+import "react-quill/dist/quill.snow.css";
 
 export default function Checkout() {
 
   const [products, setProducts] = useState([]);
   const [total, setTotal] = useState([]);
+  const [address, setAddress] = useState('');
 
   const dispatch = useDispatch();
   const { user } = useSelector((state) => ({ ...state }));
@@ -24,7 +26,7 @@ export default function Checkout() {
   }, [])
 
   const saveAddressToDB = () => {
-    //
+    console.log(address);
   };
 
   const emptyCart = () => {
@@ -52,8 +54,8 @@ export default function Checkout() {
         <h4>Delivery address </h4>
         <hr />
         <br />
-          text area
-          <button className="btn btn-primary mt-2" onClick={ saveAddressToDB }>Save</button>
+        <ReactQuill theme='snow' value={ address } onChange={ setAddress } />
+        <button className="btn btn-primary mt-2" onClick={ saveAddressToDB }>Save</button>
         <hr />
         <h4>Got coupon?</h4>
         <br />
@@ -62,8 +64,6 @@ export default function Checkout() {
       </div>
       <div className="col-md-6">
         <h4>Order Summary</h4>
-        { total }
-        { JSON.stringify(products, null, 4) }
         <hr />
         <p>Products { products.length }</p>
         <hr />

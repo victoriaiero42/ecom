@@ -1,7 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const morgan = require("morgan");
-// const bodyParser = require("body-parser");
 const cors = require("cors");
 require("dotenv").config();
 const fs = require("fs");
@@ -15,7 +14,7 @@ mongoose
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,
-    useFindAndModify: true,
+    useFindAndModify: false,
   })
   .then(() => console.log("db connected"))
   .catch((err) => console.log("db connection error", err));
