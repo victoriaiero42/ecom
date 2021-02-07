@@ -2,6 +2,9 @@ import { useEffect } from "react";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserCart } from '../fucns/user';
+import { ADD_TO_CART } from '../redux/actionTypes';
+import { emptyUserCart } from '../fucns/user';
+import { toast } from "react-toastify";
 
 export default function Checkout() {
 
@@ -20,9 +23,26 @@ export default function Checkout() {
       })
   }, [])
 
+  const saveAddressToDB = () => {
+    //
+  };
 
   const emptyCart = () => {
-    //
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('cart');
+    }
+
+    dispatch({
+      type: ADD_TO_CART,
+      payload: [],
+    });
+
+    emptyUserCart(user.token)
+      .then(res => {
+        setTotal(0);
+        setProducts([]);
+        toast.success("Cart is empty. Continue shopping.")
+      })
   }
 
 
@@ -33,7 +53,7 @@ export default function Checkout() {
         <hr />
         <br />
           text area
-          <button className="btn btn-primary mt-2" onClick={ saveAddreddToDB }>Save</button>
+          <button className="btn btn-primary mt-2" onClick={ saveAddressToDB }>Save</button>
         <hr />
         <h4>Got coupon?</h4>
         <br />
