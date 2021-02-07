@@ -1,8 +1,27 @@
-import React from "react";
+import { useEffect } from "react";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getUserCart } from '../fucns/user';
 
 export default function Checkout() {
 
-  const saveAddreddToDB = () => {
+  const [products, setProducts] = useState([]);
+  const [total, setTotal] = useState([]);
+
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => ({ ...state }));
+
+  useEffect(() => {
+    getUserCart(user.token)
+      .then(res => {
+        console.log('user cart res', JSON.stringify(res.data, null, 4));
+        setProducts(res.data.products);
+        setTotal(res.data.cartTotal);
+      })
+  }, [])
+
+
+  const emptyCart = () => {
     //
   }
 
@@ -23,12 +42,23 @@ export default function Checkout() {
       </div>
       <div className="col-md-6">
         <h4>Order Summary</h4>
+        { total }
+        { JSON.stringify(products, null, 4) }
         <hr />
-        <p>Products</p>
+        <p>Products { products.length }</p>
         <hr />
+        { products.map((p, i) => (
+          <div key={ p.product._id }>
+            <p>
+              { p.product.title } ({ p.color }) x { p.count } = { p.product.price * p.count }
+            </p>
+          </div>
+        )) }
+        <hr />
+
         <p>List of products</p>
         <hr />
-        <p>Cart total: $x</p>
+        <p>Cart total: ${ total }</p>
 
         <div className="row">
           <div className="col-md-6">
@@ -36,7 +66,7 @@ export default function Checkout() {
           </div>
 
           <div className="col-md-6">
-            <button className="btn btn-primary">Empty Cart</button>
+            <button onClick={ emptyCart } className="btn btn-primary">Empty Cart</button>
           </div>
         </div>
       </div>
