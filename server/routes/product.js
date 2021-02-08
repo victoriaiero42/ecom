@@ -16,12 +16,10 @@ router.delete("/products/:slug", authCheck, adminCheck, remove);
 
 router.post("/products", list);
 
-//rating
 router.put('/product/star/:productId', authCheck, productStar);
 
 router.get('/product/related/:productId', relatedProducts);
 
-//search
 router.post('/search/filters', searchFilters)
 
 module.exports = router;
