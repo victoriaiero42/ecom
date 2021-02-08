@@ -13,8 +13,10 @@ exports.userCart = async (req, res) => {
   // console.log(usersCart);
   if (usersCart) {
     usersCart.remove();
-    console.log("removed old cart");
+    // console.log("removed old cart");
   }
+
+  console.log('cart before error', cart);
 
   for (let i = 0; i < cart.length; i++) {
     let object = {};
@@ -60,9 +62,9 @@ exports.getUserCart = async (req, res) => {
   const user = await User.findOne({ email: req.user.email }).exec();
 
   let cart = await Cart.findOne({ orderedBy: user._id })
-    .populate('products.product', '_id title price totalAfterDiscount')
+    .populate("products.product", "_id title price totalAfterDiscount")
     .exec();
-
+  console.log('cart', cart);
   const { products, cartTotal, totalAfterDiscount } = cart;
 
   res.json({ products, cartTotal, totalAfterDiscount })
@@ -81,6 +83,6 @@ exports.saveAddress = async (req, res) => {
     { email: req.user.email },
     { address: req.body.address }
   ).exec();
-
+  console.log(userAddress);
   res.json({ ok: true });
 }

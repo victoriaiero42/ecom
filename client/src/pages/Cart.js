@@ -7,6 +7,7 @@ import { userCart } from '../fucns/user';
 export default function Cart({ history }) {
 
   const { user, cart } = useSelector((state) => ({ ...state }));
+  console.log(cart);
   // const dispatch = useDispatch();
 
   const getTotal = () => {
