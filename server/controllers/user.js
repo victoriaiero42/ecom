@@ -92,7 +92,7 @@ exports.applyCouponToUserCart = async (req, res) => {
 
 
   const { coupon } = req.body;
-  console.log('coupon', coupon);
+  // console.log('coupon', coupon);
 
 
   const validCoupon = await Coupon.findOne({ name: coupon }).exec();
@@ -103,7 +103,7 @@ exports.applyCouponToUserCart = async (req, res) => {
       err: "invalid coupon"
     })
   }
-  console.log('valid coupon', validCoupon);
+  // console.log('valid coupon', validCoupon);
 
   const user = await User.findOne({ email: req.user.email }).exec();
 
@@ -111,7 +111,7 @@ exports.applyCouponToUserCart = async (req, res) => {
     .populate('products.product', '_id title price')
     .exec();
 
-  console.log('products', products, 'discount', validCoupon.discount);
+  // console.log('products', products, 'discount', validCoupon.discount);
 
   let totalAfterDiscount = (cartTotal - (cartTotal * validCoupon.discount) / 100).toFixed(2);
 

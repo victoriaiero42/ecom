@@ -7,12 +7,12 @@ import {
   emptyUserCart,
   applyCoupon,
 } from "../fucns/user";
-import { ADD_TO_CART } from "../redux/actionTypes";
+import { ADD_TO_CART, COUPON_APPLIED } from "../redux/actionTypes";
 import { toast } from "react-toastify";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 
-export default function Checkout() {
+export default function Checkout({ history }) {
   const [products, setProducts] = useState([]);
   const [total, setTotal] = useState([]);
   const [address, setAddress] = useState("");
@@ -91,11 +91,18 @@ export default function Checkout() {
         console.log('error');
         setDiscountError(res.data.err);
         console.log('discountError', discountError);
-        //redux
+        dispatch({
+          type: COUPON_APPLIED,
+          payload: false,
+        });
       } else if (res.data) {
         setTotalAfterDiscount(res.data);
         console.log('here');
-        //redux
+        dispatch({
+          type: COUPON_APPLIED,
+          payload: true,
+        });
+
       }
 
     });
@@ -160,7 +167,9 @@ export default function Checkout() {
           <div className="col-md-6">
             <button
               disabled={ !addressSaved || !products.length }
-              className="btn btn-primary">
+              className="btn btn-primary"
+              onClick={ () => history.pushState('/payment') }
+            >
               Place Order
             </button>
           </div>
