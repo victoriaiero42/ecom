@@ -54,6 +54,8 @@ export default function Checkout() {
     emptyUserCart(user.token).then((res) => {
       setTotal(0);
       setProducts([]);
+      setTotalAfterDiscount(0);
+      setCoupon('');
       toast.success("Cart is empty. Continue shopping.");
     });
   };
@@ -87,7 +89,8 @@ export default function Checkout() {
 
       if (res.data.err) {
         console.log('error');
-        setDiscountError(res.data.error);
+        setDiscountError(res.data.err);
+        console.log('discountError', discountError);
         //redux
       } else if (res.data) {
         setTotalAfterDiscount(res.data);
@@ -133,7 +136,7 @@ export default function Checkout() {
 
         <br />
 
-        { discountError && <p className="bg-danger p-2"> { discountError }</p> }
+        { discountError && <p className="bg-danger p-2"> Sorry, { discountError }</p> }
       </div>
       <div className="col-md-6">
         <h4>Order Summary</h4>
