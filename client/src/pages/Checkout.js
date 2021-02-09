@@ -1,7 +1,12 @@
 import { useEffect } from "react";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getUserCart, saveUserAddress, emptyUserCart, applyCoupon } from "../fucns/user";
+import {
+  getUserCart,
+  saveUserAddress,
+  emptyUserCart,
+  applyCoupon,
+} from "../fucns/user";
 import { ADD_TO_CART } from "../redux/actionTypes";
 import { toast } from "react-toastify";
 import ReactQuill from "react-quill";
@@ -12,9 +17,9 @@ export default function Checkout() {
   const [total, setTotal] = useState([]);
   const [address, setAddress] = useState("");
   const [addressSaved, setAddressSaved] = useState(false);
-  const [coupon, setCoupon] = useState('');
-  const [totalAfterDiscount, setTotalAfterDiscount] = useState('');
-  const [discountError, setDiscountError] = useState('');
+  const [coupon, setCoupon] = useState("");
+  const [totalAfterDiscount, setTotalAfterDiscount] = useState(0);
+  const [discountError, setDiscountError] = useState("");
 
   const dispatch = useDispatch();
   const { user } = useSelector((state) => ({ ...state }));
@@ -53,15 +58,16 @@ export default function Checkout() {
     });
   };
 
-
   const showAddress = () => {
-    return <>
-      <ReactQuill theme="snow" value={ address } onChange={ setAddress } />
-      <button className="btn btn-primary mt-2" onClick={ saveAddressToDB }>
-        Save
-    </button>
-    </>
-  }
+    return (
+      <>
+        <ReactQuill theme="snow" value={ address } onChange={ setAddress } />
+        <button className="btn btn-primary mt-2" onClick={ saveAddressToDB }>
+          Save
+        </button>
+      </>
+    );
+  };
 
   const showProductSummary = () => {
     return products.map((p, i) => (
@@ -71,37 +77,45 @@ export default function Checkout() {
           { p.product.price * p.count }
         </p>
       </div>
-    ))
+    ));
   };
 
   const applyDiscountCoupon = () => {
-    console.log('send to back', coupon);
-    applyCoupon(user.token, coupon)
-      .then(res => {
-        console.log('res on coupon applied', res.data);
-        if (res.data) {
-          setTotalAfterDiscount(res.data);
+    console.log("send to back", coupon);
+    applyCoupon(user.token, coupon).then((res) => {
+      console.log("res on coupon applied", res.data);
 
-          //redux
+      if (res.data.err) {
+        console.log('error');
+        setDiscountError(res.data.error);
+        //redux
+      } else if (res.data) {
+        setTotalAfterDiscount(res.data);
+        console.log('here');
+        //redux
+      }
 
-        }
-        if (res.data.error) {
-          setDiscountError(res.data.error)
-          //redux
-        }
-      })
-  }
+    });
+  };
 
   const showApplyCoupon = () => {
-    return <>
-      <input type="text"
-        className="form-control"
-        onChange={ (e) => setCoupon(e.target.value) }
-        value={ coupon }
-      />
-      <button onClick={ applyDiscountCoupon } className="btn btn-primary mt-2">Apply</button>
-    </>
-  }
+    return (
+      <>
+        <input
+          type="text"
+          className="form-control"
+          onChange={ (e) => {
+            setCoupon(e.target.value);
+            setDiscountError("");
+          } }
+          value={ coupon }
+        />
+        <button onClick={ applyDiscountCoupon } className="btn btn-primary mt-2">
+          Apply
+        </button>
+      </>
+    );
+  };
 
   return (
     <div className="row">
@@ -110,13 +124,16 @@ export default function Checkout() {
         <hr />
         <br />
 
-
         { showAddress() }
         <hr />
         <h4>Got coupon?</h4>
         <br />
-        <br />
+
         { showApplyCoupon() }
+
+        <br />
+
+        { discountError && <p className="bg-danger p-2"> { discountError }</p> }
       </div>
       <div className="col-md-6">
         <h4>Order Summary</h4>
@@ -130,9 +147,19 @@ export default function Checkout() {
         <hr />
         <p>Cart total: ${ total }</p>
 
+        { totalAfterDiscount > 0 && (
+          <p className="bg-success p-2">
+            Discount Applied. Total Payable: ${totalAfterDiscount }
+          </p>
+        ) }
+
         <div className="row">
           <div className="col-md-6">
-            <button disabled={ !addressSaved || !products.length } className="btn btn-primary">Place Order</button>
+            <button
+              disabled={ !addressSaved || !products.length }
+              className="btn btn-primary">
+              Place Order
+            </button>
           </div>
 
           <div className="col-md-6">
