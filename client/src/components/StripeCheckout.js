@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from 'react-router-dom';
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { useSelector, useDispatch } from "react-redux";
 import { createPaymentIntent } from "../fucns/stripe";
@@ -23,12 +24,33 @@ export default function StripeCheckout({ history }) {
     });
   }, []);
 
-  const handleSubmit = () => {
-    //
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setProcessing(true);
+
+    const payload = await stripe.confirmCardPayment(clientSecret, {
+      payment_method: {
+        card: elements.getElement(CardElement),
+        billing_details: {
+          name: e.target.value,
+        }
+      }
+    })
+
+    if (payload.error) {
+      setError(`Payment failed ${payload.error.message}`);
+      setProcessing(false);
+    } else {
+      console.log(JSON.stringify(payload, null, 4));
+      setError(null);
+      setProcessing(false);
+      setSucceeded(true);
+    }
   };
 
-  const handleChange = () => {
-    //
+  const handleChange = (e) => {
+    setDisabled(e.empty);
+    setError(e.error ? e.error : '');
   };
 
   const cartStyle = {
@@ -51,6 +73,10 @@ export default function StripeCheckout({ history }) {
 
   return (
     <div>
+
+      <p className={ succeeded ? 'result-message' : 'result-message hidden' }>
+        Payment successful. <Link to='/user/history'>See it in your history.</Link>
+      </p>
       <form
         id="payment-form"
         className="stripe-form"
@@ -63,6 +89,8 @@ export default function StripeCheckout({ history }) {
           </span>
         </button>
       </form>
+
+      {error && <div className="card-error" role='alert'>{ error }</div> }
     </div>
   );
 }
