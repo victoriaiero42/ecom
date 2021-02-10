@@ -168,7 +168,7 @@ export default function Checkout({ history }) {
             <button
               disabled={ !addressSaved || !products.length }
               className="btn btn-primary"
-              onClick={ () => history.pushState('/payment') }
+              onClick={ () => history.push('/payment') }
             >
               Place Order
             </button>

@@ -20,7 +20,7 @@ export default function StripeCheckout({ history }) {
   useEffect(() => {
     createPaymentIntent(user.token).then((res) => {
       console.log("create payment intent", res.data);
-      setClientSecret(res.data);
+      setClientSecret(res.data.clientSecret);
     });
   }, []);
 
@@ -32,7 +32,7 @@ export default function StripeCheckout({ history }) {
       payment_method: {
         card: elements.getElement(CardElement),
         billing_details: {
-          name: e.target.value,
+          name: e.target.name.value,
         }
       }
     })
