@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { useSelector, useDispatch } from "react-redux";
 import { createPaymentIntent } from "../fucns/stripe";
+import { Card } from "antd";
+import { DollarOutlined, CheckOutlined } from "@ant-design/icons";
+import laptop from "../images/laptop.jpg";
 
 export default function StripeCheckout({ history }) {
   const dispatch = useDispatch();
@@ -13,6 +16,9 @@ export default function StripeCheckout({ history }) {
   const [processing, setProcessing] = useState("");
   const [disabled, setDisabled] = useState(true);
   const [clientSecret, setClientSecret] = useState("");
+  const [cartTotal, setCartTotal] = useState(0);
+  const [totalAfterDiscount, setTotalAfterDiscount] = useState(0);
+  const [payable, setPayable] = useState(0);
 
   const stripe = useStripe();
   const elements = useElements();
@@ -21,6 +27,9 @@ export default function StripeCheckout({ history }) {
     createPaymentIntent(user.token, coupon).then((res) => {
       console.log("create payment intent", res.data);
       setClientSecret(res.data.clientSecret);
+      setCartTotal(res.data.cartTotal);
+      setTotalAfterDiscount(res.data.totalAfterDiscount);
+      setPayable(res.data.payable);
     });
   }, []);
 
@@ -33,9 +42,9 @@ export default function StripeCheckout({ history }) {
         card: elements.getElement(CardElement),
         billing_details: {
           name: e.target.name.value,
-        }
-      }
-    })
+        },
+      },
+    });
 
     if (payload.error) {
       setError(`Payment failed ${payload.error.message}`);
@@ -50,7 +59,7 @@ export default function StripeCheckout({ history }) {
 
   const handleChange = (e) => {
     setDisabled(e.empty);
-    setError(e.error ? e.error : '');
+    setError(e.error ? e.error : "");
   };
 
   const cartStyle = {
@@ -73,24 +82,66 @@ export default function StripeCheckout({ history }) {
 
   return (
     <div>
+      {!succeeded && (
+        <div>
+          {coupon && totalAfterDiscount !== undefined ? (
+            <p className="alert alert-success">{ `Total after discount: $${totalAfterDiscount}` }</p>
+          ) : (
+              <p className="alert alert-danger">No coupon applied</p>
+            ) }
+        </div>
+      ) }
 
-      <p className={ succeeded ? 'result-message' : 'result-message hidden' }>
-        Payment successful. <Link to='/user/history'>See it in your history.</Link>
-      </p>
-      <form
-        id="payment-form"
-        className="stripe-form"
-        onSubmit={ handleSubmit }>
-
-        <CardElement id="card-element" options={ cartStyle } onChange={ handleChange } />
-        <button className="stripe-button" disabled={ processing || disabled || succeeded }>
+      <div className="text-center pb-5">
+        <Card
+          cover={
+            <img
+              alt="laptop"
+              src={ laptop }
+              style={ {
+                height: "200px",
+                objectFit: "cover",
+                marginBottom: "-50px",
+              } }
+              actions={ [
+                <>
+                  <DollarOutlined className="text-info" /> <br /> Total: $
+                  { cartTotal }
+                </>,
+                <>
+                  <CheckOutlined className="text-info" /> <br /> Total pay: $
+                  { (payable / 100).toFixed(2) }
+                </>,
+              ] }
+            />
+          }
+        />
+      </div>
+      <form id="payment-form" className="stripe-form" onSubmit={ handleSubmit }>
+        <CardElement
+          id="card-element"
+          options={ cartStyle }
+          onChange={ handleChange }
+        />
+        <button
+          className="stripe-button"
+          disabled={ processing || disabled || succeeded }>
           <span id="button-text">
-            { processing ? <div className="spinner" id="spinner"></div> : 'Pay' }
+            { processing ? <div className="spinner" id="spinner"></div> : "Pay" }
           </span>
         </button>
       </form>
 
-      {error && <div className="card-error" role='alert'>{ error }</div> }
+      {error && (
+        <div className="card-error" role="alert">
+          {error }
+        </div>
+      ) }
+
+      <p className={ succeeded ? "result-message" : "result-message hidden" }>
+        Payment successful.{ " " }
+        <Link to="/user/history">See it in your history.</Link>
+      </p>
     </div>
   );
 }
